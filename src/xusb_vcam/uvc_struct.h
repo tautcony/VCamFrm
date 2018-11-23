@@ -24,6 +24,7 @@ typedef unsigned char  __u8;
 typedef unsigned short __u16;
 typedef unsigned int   __u32;
 typedef unsigned short __le16;
+#pragma warning (disable: 4200)
 
 #define __attribute__(A)
 #endif

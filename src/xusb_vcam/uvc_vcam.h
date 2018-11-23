@@ -1,5 +1,5 @@
 //// By Fanxiushu 2016-10-04
-/////
+
 #pragma once
 
 struct frame_t
@@ -9,7 +9,7 @@ struct frame_t
     int   width;
     int   height;
     int   delay_msec; ///Õ£¡Ù ±º‰
-    ////
+
     void* param;
 };
 
@@ -21,7 +21,7 @@ struct uvc_vcam_t
     int vid;
     const char* manu_fact;
     const char* product;
-    FRAME_CALLBACK  frame_callback; ///
+    FRAME_CALLBACK  frame_callback;
     void* param;
 };
 
@@ -29,4 +29,3 @@ struct uvc_vcam_t
 void* vcam_create(uvc_vcam_t* uvc);
 
 void vcam_destroy(void* handle);
-
