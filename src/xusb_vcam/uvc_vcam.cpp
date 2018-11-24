@@ -1,7 +1,7 @@
-/// by fanxiushu 2016-10-01
-///·ûºÏ USB Video Class Ğ­ÒéµÄÉãÏñÍ· °æ±¾ 1.0
-///Çı¶¯½Ó¿ÚÀ´×Ô±¾ÈË¿ª·¢µÄĞéÄâUSBÇı¶¯¡£
-///´¦ÀíÁËÖ÷ÒªµÄ²¿·ÖĞ­Òé, ÈçĞèÒªÍêÉÆ£¬¿ÉÔÚ´Ë´úÂë»ù´¡ÉÏĞŞ¸ÄÍêÉÆ
+ï»¿/// by fanxiushu 2016-10-01
+///ç¬¦åˆ USB Video Class åè®®çš„æ‘„åƒå¤´ ç‰ˆæœ¬ 1.0
+///é©±åŠ¨æ¥å£æ¥è‡ªæœ¬äººå¼€å‘çš„è™šæ‹ŸUSBé©±åŠ¨ã€‚
+///å¤„ç†äº†ä¸»è¦çš„éƒ¨åˆ†åè®®, å¦‚éœ€è¦å®Œå–„ï¼Œå¯åœ¨æ­¤ä»£ç åŸºç¡€ä¸Šä¿®æ”¹å®Œå–„
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
@@ -9,14 +9,14 @@
 #include "virt_dev.h"
 #include "uvc_vcam.h"
 
-#define EP_ADDR    0x82 //ÓÃÓÚÊÓÆµÁ÷´«ÊäµÄ¶Ë¿Ú
+#define EP_ADDR    0x82 //ç”¨äºè§†é¢‘æµä¼ è¾“çš„ç«¯å£
 
 class uvc_vcam
 {
 protected:
-    int curr_config;      ///µ±Ç°ÅäÖÃ½Ó¿Ú
-    int curr_interface;   ///µ±Ç°½Ó¿Ú
-    int curr_alt_setting; ////µ±Ç°½Ó¿ÚµÄÑ¡Ôñ×Ó
+    int curr_config;      ///å½“å‰é…ç½®æ¥å£
+    int curr_interface;   ///å½“å‰æ¥å£
+    int curr_alt_setting; ////å½“å‰æ¥å£çš„é€‰æ‹©å­
 
     int curr_format_index;
     int curr_frame_index;
@@ -35,19 +35,19 @@ protected:
         int height;
     }frames[10];
 
-    ///ÓÃÓÚÊÓÆµ´«Êä¹ı³Ì
+    ///ç”¨äºè§†é¢‘ä¼ è¾“è¿‡ç¨‹
     int frame_length;
     char* frame_buffer;
-    int frame_pos; ///µ±Ç°Ö¡µÄ´«ÊäÎ»ÖÃ
-    unsigned char frame_flip; ///Ã¿¸öÖ¡½øĞĞ 0 ºÍ 1 ·­×ª
+    int frame_pos; ///å½“å‰å¸§çš„ä¼ è¾“ä½ç½®
+    unsigned char frame_flip; ///æ¯ä¸ªå¸§è¿›è¡Œ 0 å’Œ 1 ç¿»è½¬
 
-    int frame_delay_msec; //Ã¿¸öÖ¡µÄÍ£ÁôÊ±¼ä£¬Ä¬ÈÏ 33 ºÁÃë ,ÓÃÓÚ¿ØÖÆËÙ¶È fps 
+    int frame_delay_msec; //æ¯ä¸ªå¸§çš„åœç•™æ—¶é—´ï¼Œé»˜è®¤ 33 æ¯«ç§’ ,ç”¨äºæ§åˆ¶é€Ÿåº¦ fps 
     //
     usb_device_descriptor dev_desc;
 
     char str_buffer[1 * 1024];
     int  str_count;
-    usb_string_descriptor* str_desc[10]; //¶¨Òå10¸ö£¬ÆäÊµ¾Í 0,1,2
+    usb_string_descriptor* str_desc[10]; //å®šä¹‰10ä¸ªï¼Œå…¶å®å°± 0,1,2
 
     char cfg_buffer[16 * 1024];
     int  cfg_length;
@@ -71,11 +71,11 @@ protected:
     }
     void loop();
 
-    void descriptor(usbtx_header_t* hdr); //´¦ÀíÃèÊöÏà¹Ø
+    void descriptor(usbtx_header_t* hdr); //å¤„ç†æè¿°ç›¸å…³
     void vendor_control(usbtx_header_t* hdr); //
     void control_transfer(usbtx_header_t* hdr); //
     void iso_transfer(usbtx_header_t* hdr);
-    int  video_encode(unsigned char* vid_buf, int vid_len); //Ã¿¸öiso packet¶¼µÃÓĞ¸öplayer header
+    int  video_encode(unsigned char* vid_buf, int vid_len); //æ¯ä¸ªiso packetéƒ½å¾—æœ‰ä¸ªplayer header
 
 public:
     uvc_vcam();
@@ -89,16 +89,16 @@ uvc_vcam::uvc_vcam()
 {
     curr_config = -1;
     curr_interface = -1;
-    curr_alt_setting = -1; ///-1 ±íÊ¾µ±Ç°Ã»Ñ¡ÔñÈÎºÎ½Ó¿Ú
+    curr_alt_setting = -1; ///-1 è¡¨ç¤ºå½“å‰æ²¡é€‰æ‹©ä»»ä½•æ¥å£
 
-    curr_format_index = 1; //Ä¬ÈÏ
-    curr_frame_index = 1; ///Ä¬ÈÏÖµ
+    curr_format_index = 1; //é»˜è®¤
+    curr_frame_index = 1; ///é»˜è®¤å€¼
 
     iso_ep_addr = EP_ADDR;
 
     format_count = 1;
     // guidFormat = { 0xe436eb7d, 0x524f, 0x11ce, {0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70 } };// MEDIASUBTYPE_RGB24 
-    // bitsPerPixel = 24; /// RGB ÈıÔ­É«
+    // bitsPerPixel = 24; /// RGB ä¸‰åŸè‰²
 
     guidFormat = { 0x32595559, 0x0000, 0x0010, {0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71 } }; // MEDIASUBTYPE_YUY2
     bitsPerPixel = 16; //// YUY2 
@@ -143,17 +143,17 @@ void uvc_vcam::fill_dev_desc(unsigned short pid, unsigned int vid)
     dev_desc.bLength = 0x12;  // length 18
     dev_desc.bDescriptorType = 0x01;  // type 1
     dev_desc.bcdUSB = 0x0200; // usb 2.0
-    dev_desc.bDeviceClass = 0xEF; // ¹Ì¶¨Îªef £¬±íÊ¾ÊÇmiscÉè±¸
+    dev_desc.bDeviceClass = 0xEF; // å›ºå®šä¸ºef ï¼Œè¡¨ç¤ºæ˜¯miscè®¾å¤‡
     dev_desc.bDeviceSubClass = 0x02; // common class
     dev_desc.bDeviceProtocol = 0x01; //Interface Association Descriptor
     dev_desc.bMaxPacketSize0 = 0x40; // 64
     dev_desc.idVendor = vid;
     dev_desc.idProduct = pid;
-    dev_desc.bcdDevice = 0x00; /// Éè±¸³ö³§±àºÅ
-    dev_desc.iManufacturer = 0x01; // ³§ÉÌĞÅÏ¢ĞòºÅ£¬¹Ì¶¨Îª1 
-    dev_desc.iProduct = 0x02;     //²úÆ·ĞÅÏ¢ĞòºÅ£¬¹Ì¶¨2
-    dev_desc.iSerialNumber = 0x00; //ÎŞĞòÁĞºÅ
-    dev_desc.bNumConfigurations = 1; //Ò»¸öÅäÖÃÃèÊö·û
+    dev_desc.bcdDevice = 0x00; /// è®¾å¤‡å‡ºå‚ç¼–å·
+    dev_desc.iManufacturer = 0x01; // å‚å•†ä¿¡æ¯åºå·ï¼Œå›ºå®šä¸º1 
+    dev_desc.iProduct = 0x02;     //äº§å“ä¿¡æ¯åºå·ï¼Œå›ºå®š2
+    dev_desc.iSerialNumber = 0x00; //æ— åºåˆ—å·
+    dev_desc.bNumConfigurations = 1; //ä¸€ä¸ªé…ç½®æè¿°ç¬¦
 }
 void uvc_vcam::fill_str_desc(const char* manu_fact, const char* product)
 {
@@ -181,17 +181,17 @@ void uvc_vcam::fill_str_desc(const char* manu_fact, const char* product)
 }
 void uvc_vcam::fill_cfg_desc()
 {
-    //ÅäÖÃÃèÊö·û
+    //é…ç½®æè¿°ç¬¦
     cfg_desc = (usb_config_descriptor*)cfg_buffer;
 
     cfg_desc->bLength = 0x09; /// Length
     cfg_desc->bDescriptorType = 0x02; /// config
     cfg_desc->wTotalLength = 9; /// modified 
-    cfg_desc->bNumInterfaces = 2; ///Á½¸ö½Ó¿Ú£¬Ò»¸ö video control interface, Ò»¸ö video stream interface
+    cfg_desc->bNumInterfaces = 2; ///ä¸¤ä¸ªæ¥å£ï¼Œä¸€ä¸ª video control interface, ä¸€ä¸ª video stream interface
     cfg_desc->bConfigurationValue = 1;
     cfg_desc->iConfiguration = 0;
-    cfg_desc->bmAttributes = 0x80;///µçÔ´Ä£Ê½£¬Ëæ±ãÂÒÌî
-    cfg_desc->bMaxPower = 0x40; //×î´óµçÁ÷£¬ÂÒÌî
+    cfg_desc->bmAttributes = 0x80;///ç”µæºæ¨¡å¼ï¼Œéšä¾¿ä¹±å¡«
+    cfg_desc->bMaxPower = 0x40; //æœ€å¤§ç”µæµï¼Œä¹±å¡«
 
     ///// IAD Descriptor 
     usb_interface_assoc_descriptor* iad = (usb_interface_assoc_descriptor*)((char*)cfg_desc + cfg_desc->bLength);
@@ -210,7 +210,7 @@ void uvc_vcam::fill_cfg_desc()
     intr->bDescriptorType = 0x04; /// interface descriptor
     intr->bInterfaceNumber = 0;
     intr->bAlternateSetting = 0;
-    intr->bNumEndpoints = 0x00; // 0x01; /// (Ò»¸ö) 0¸ö intrrupt endpoint ×öÊ²Ã´ÓÃµÄ £¿ ???--------------
+    intr->bNumEndpoints = 0x00; // 0x01; /// (ä¸€ä¸ª) 0ä¸ª intrrupt endpoint åšä»€ä¹ˆç”¨çš„ ï¼Ÿ ???--------------
     intr->bInterfaceClass = 0x0E; // video 
     intr->bInterfaceSubClass = 0x01; /// video control
     intr->bInterfaceProtocol = 0x00; //
@@ -222,20 +222,20 @@ void uvc_vcam::fill_cfg_desc()
     vchdr->bDescriptorType = 0x24; /// video control interface
     vchdr->bDescriptorSubType = 0x01; /// video control header
     vchdr->bcdUVC = 0x0100; /// UVC 1.0
-    vchdr->wTotalLength = 0x4F; ////×Ü³¤¶È, 79, µ½ Video Control Extension Unit Descriptor ½áÊø
+    vchdr->wTotalLength = 0x4F; ////æ€»é•¿åº¦, 79, åˆ° Video Control Extension Unit Descriptor ç»“æŸ
     vchdr->dwClockFrequency = 0x01C9C380; // (30 MHz)
-    vchdr->bInCollection = 0x01; /// ÓĞ1¸östream ÊôÓÚÕâ¸övideo control
-    vchdr->baInterfaceNr[0] = 0x01; ///Õâ¸ö stream µÄinterfacenumber
+    vchdr->bInCollection = 0x01; /// æœ‰1ä¸ªstream å±äºè¿™ä¸ªvideo control
+    vchdr->baInterfaceNr[0] = 0x01; ///è¿™ä¸ª stream çš„interfacenumber
 
     /////Video Control Input Terminal Descriptor 
     uvc_camera_terminal_descriptor* ctd = (uvc_camera_terminal_descriptor*)((char*)vchdr + vchdr->bLength);
     ctd->bLength = 0x12; // Length 18
     ctd->bDescriptorType = 0x24; // video control interface
     ctd->bDescriptorSubType = 0x02; // input termal
-    ctd->bTerminalID = 0x01; //// ID Î¨Ò»Öµ
+    ctd->bTerminalID = 0x01; //// ID å”¯ä¸€å€¼
     ctd->wTerminalType = 0x0201; //// ITT_CAMERA
-    ctd->bAssocTerminal = 0x00; //²»¹ØÁªµ½ output termal destripor
-    ctd->iTerminal = 0; ///string index , 0,²»´æÔÚÃèÊö
+    ctd->bAssocTerminal = 0x00; //ä¸å…³è”åˆ° output termal destripor
+    ctd->iTerminal = 0; ///string index , 0,ä¸å­˜åœ¨æè¿°
     ctd->wObjectiveFocalLengthMax = 0;
     ctd->wObjectiveFocalLengthMin = 0;
     ctd->wOcularFocalLength = 0;
@@ -252,7 +252,7 @@ void uvc_vcam::fill_cfg_desc()
     pud->bSourceID = 0x01;
     pud->wMaxMultiplier = 0x00;
     pud->bControlSize = 0x02;
-    pud->bmControls[0] = 0x7B; ///ÁÁ¶È£¬¶Ô±È¶ÈµÈµÈĞÅÏ¢
+    pud->bmControls[0] = 0x7B; ///äº®åº¦ï¼Œå¯¹æ¯”åº¦ç­‰ç­‰ä¿¡æ¯
     pud->bmControls[1] = 0x17;
     pud->iProcessing = 0;
 
@@ -263,7 +263,7 @@ void uvc_vcam::fill_cfg_desc()
     otd->bDescriptorSubType = 0x03; // output terminal
     otd->bTerminalID = 0x03; /// ID 
     otd->wTerminalType = 0x0101; /// TT_STREMAING
-    otd->bAssocTerminal = 0x00; //Ã»ÓĞ¹ØÁª
+    otd->bAssocTerminal = 0x00; //æ²¡æœ‰å…³è”
     otd->bSourceID = 0x02;
     otd->iTerminal = 0;
 
@@ -276,7 +276,7 @@ void uvc_vcam::fill_cfg_desc()
     // {88F04DA6-F713-454A-B625-3793AE447516}
     static const GUID g =
     { 0x88f04da6, 0xf713, 0x454a,{ 0xb6, 0x25, 0x37, 0x93, 0xae, 0x44, 0x75, 0x16 } };
-    memcpy(eud->guidExtensionCode, &g, sizeof(GUID)); //// ¸ÉÂïÓÃµÄ £¿£¿£¿
+    memcpy(eud->guidExtensionCode, &g, sizeof(GUID)); //// å¹²å˜›ç”¨çš„ ï¼Ÿï¼Ÿï¼Ÿ
     eud->bNumControls = 0x08; /// ??
     eud->bNrInPins = 0x01;
     eud->baSourceID[0] = 0x01; //// sourid 
@@ -306,13 +306,13 @@ void uvc_vcam::fill_cfg_desc()
     vshdr->bLength = 0x0E; // Length 14
     vshdr->bDescriptorType = 0x24; /// video stream interface
     vshdr->bDescriptorSubType = 0x01; ///input header
-    vshdr->bNumFormats = 0x01; /// Ò»¸ö¸ñÊ½»¯ĞÅÏ¢
-    vshdr->wTotalLength = 14 + 27 + frame_count * 34 + 6; ///  ×Ü³¤¶È ,µ½ VS Color Matching Descriptor Descriptor½áÊø
+    vshdr->bNumFormats = 0x01; /// ä¸€ä¸ªæ ¼å¼åŒ–ä¿¡æ¯
+    vshdr->wTotalLength = 14 + 27 + frame_count * 34 + 6; ///  æ€»é•¿åº¦ ,åˆ° VS Color Matching Descriptor Descriptorç»“æŸ
     vshdr->bEndpointAddress = iso_ep_addr;
     vshdr->bmInfo = 0x00;
     vshdr->bTerminalLink = 0x03; /// connect Output Terminal Descriptor ...
-    vshdr->bStillCaptureMethod = 0x00; ///²»Ìá¹©¾²Ì¬Í¼Ïñ
-    vshdr->bTriggerSupport = 0x00; //²»Ìá¹©Ó²¼şÊÂ¼ş£¬ºÃÏñ¶ÔÓ¦µÄ¾ÍÊÇ ¿ØÖÆinterfaceµÄÖĞ¶Ï´«Êä¶Ëµã ?
+    vshdr->bStillCaptureMethod = 0x00; ///ä¸æä¾›é™æ€å›¾åƒ
+    vshdr->bTriggerSupport = 0x00; //ä¸æä¾›ç¡¬ä»¶äº‹ä»¶ï¼Œå¥½åƒå¯¹åº”çš„å°±æ˜¯ æ§åˆ¶interfaceçš„ä¸­æ–­ä¼ è¾“ç«¯ç‚¹ ?
     vshdr->bTriggerUsage = 0x00;
     vshdr->bControlSize = 0x01;
     vshdr->bmaControls[0] = 0x00;
@@ -365,8 +365,8 @@ void uvc_vcam::fill_cfg_desc()
     cmd->bTransferCharacteristics = 0x01; //(BT.709)
     cmd->bMatrixCoefficients = 0x04; //(SMPTE 170M)
 
-    ///¾ÍÄ£ÄâÒ»¸ö¶Ë¿Ú¾Í¿ÉÒÔÁË
-    //////Interface Descriptor ,ÃèÊöÓÃÓÚÊÓÆµÊı¾İ´«ÊäµÄ iso¶Ë¿Ú
+    ///å°±æ¨¡æ‹Ÿä¸€ä¸ªç«¯å£å°±å¯ä»¥äº†
+    //////Interface Descriptor ,æè¿°ç”¨äºè§†é¢‘æ•°æ®ä¼ è¾“çš„ isoç«¯å£
     intr = (usb_interface_descriptor*)((char*)cmd + cmd->bLength);
     intr->bLength = 0x09;
     intr->bDescriptorType = 0x04;
@@ -401,7 +401,7 @@ void uvc_vcam::loop()
         usbtx_header_t* hdr = virt_usb_begin(usb_ptr);
         if (!hdr)continue;
 
-        hdr->result = -1; ////Ê×ÏÈÉèÖÃÊ§°Ü£¬·²ÊÇÃ»±»´¦ÀíµÄ£¬¶¼Ê§°Ü
+        hdr->result = -1; ////é¦–å…ˆè®¾ç½®å¤±è´¥ï¼Œå‡¡æ˜¯æ²¡è¢«å¤„ç†çš„ï¼Œéƒ½å¤±è´¥
 
         if (hdr->type == 1) { // descriptor
 
@@ -413,19 +413,19 @@ void uvc_vcam::loop()
             vendor_control(hdr);
 
         }
-        else if (hdr->type == 3) { //Êı¾İ´«Êä
-            if (hdr->transfer.type == 3) { //Í¬²½´«Êä
+        else if (hdr->type == 3) { //æ•°æ®ä¼ è¾“
+            if (hdr->transfer.type == 3) { //åŒæ­¥ä¼ è¾“
             //	printf("iso transfer\n");
                 iso_transfer(hdr);
             }
-            else if (hdr->transfer.type == 1) { //¿ØÖÆ´«Êä£¬´¦ÀíÄ³Ğ©ÇëÇóÃèÊö·ûÖ±½Ó²ÉÓÃ¿ØÖÆ´«ÊäÇëÇó
+            else if (hdr->transfer.type == 1) { //æ§åˆ¶ä¼ è¾“ï¼Œå¤„ç†æŸäº›è¯·æ±‚æè¿°ç¬¦ç›´æ¥é‡‡ç”¨æ§åˆ¶ä¼ è¾“è¯·æ±‚
                 control_transfer(hdr);
             }
             else {
                 printf("not supported transfer type=%d\n", hdr->transfer.type);
             }
         }
-        else if (hdr->type == 4) {//ÖØÖÃÉè±¸»òÕß¶Ë¿Ú£¬ÕâÀï¼ÙÉè¶¼³É¹¦
+        else if (hdr->type == 4) {//é‡ç½®è®¾å¤‡æˆ–è€…ç«¯å£ï¼Œè¿™é‡Œå‡è®¾éƒ½æˆåŠŸ
             printf("reset device: type=%d\n", hdr->reset.type);
             hdr->result = 0;
         }
@@ -446,13 +446,13 @@ void uvc_vcam::loop()
 }
 void uvc_vcam::descriptor(usbtx_header_t* hdr)
 {
-    if (hdr->descriptor.type == 1) { //»ñÈ¡ÃèÊö·û ,hdr->descriptor.is_read ==TRUE 
-        if (hdr->descriptor.subtype == 1) { //Éè±¸ÃèÊö·û
+    if (hdr->descriptor.type == 1) { //è·å–æè¿°ç¬¦ ,hdr->descriptor.is_read ==TRUE 
+        if (hdr->descriptor.subtype == 1) { //è®¾å¤‡æè¿°ç¬¦
             hdr->result = 0;
             memcpy(hdr->data, &this->dev_desc, 18);
             hdr->data_length = 18;
         }
-        else if (hdr->descriptor.subtype == 2) { //ÅäÖÃÃèÊö·û
+        else if (hdr->descriptor.subtype == 2) { //é…ç½®æè¿°ç¬¦
             if (hdr->data_length < 0x09) {
                 printf("falt err cfg_desc length not match\n");
                 hdr->result = -1;
@@ -463,25 +463,25 @@ void uvc_vcam::descriptor(usbtx_header_t* hdr)
             }
 
         }
-        else if (hdr->descriptor.subtype == 3) { //»ñÈ¡×Ö·û´®
+        else if (hdr->descriptor.subtype == 3) { //è·å–å­—ç¬¦ä¸²
 
             if (hdr->descriptor.index >= str_count || hdr->descriptor.index < 0) { //
                 hdr->result = -1;
             }
             else {
                 hdr->result = 0;
-                hdr->data_length = str_desc[hdr->descriptor.index]->bLength; //ÕâÀïÃ»¶ÔÔ­À´µÄdata_lengthÅĞ¶Ï£¬ÈÏÎª¶¼ÓĞ×ã¹»»º´æÀ´½ÓÄÉ×Ö·û´®
+                hdr->data_length = str_desc[hdr->descriptor.index]->bLength; //è¿™é‡Œæ²¡å¯¹åŸæ¥çš„data_lengthåˆ¤æ–­ï¼Œè®¤ä¸ºéƒ½æœ‰è¶³å¤Ÿç¼“å­˜æ¥æ¥çº³å­—ç¬¦ä¸²
                 memcpy(hdr->data, str_desc[hdr->descriptor.index], hdr->data_length);
             }
 
         }
 
     }
-    else if (hdr->descriptor.type == 2) { //ÉèÖÃÅäÖÃ»òÕß½Ó¿ÚÃèÊö·û
+    else if (hdr->descriptor.type == 2) { //è®¾ç½®é…ç½®æˆ–è€…æ¥å£æè¿°ç¬¦
         if (hdr->descriptor.subtype == 1) { // set config
             hdr->result = 0;
             if (hdr->descriptor.index == -1 && hdr->descriptor.value == -1) this->curr_config = -1;
-            else this->curr_config = hdr->descriptor.value; ///Ñ¡ÔñµÄÅäÖÃÃèÊö·û
+            else this->curr_config = hdr->descriptor.value; ///é€‰æ‹©çš„é…ç½®æè¿°ç¬¦
         }
         else if (hdr->descriptor.subtype == 2) { // set interface
             hdr->result = 0;
@@ -503,7 +503,7 @@ void uvc_vcam::vendor_control(usbtx_header_t* hdr)
     switch (hdr->vendor.request)
     {
         /*	case UVC_GET_INFO:
-                if(hdr->data_length ==1){ //±»ÉèÖÃ Îª 1
+                if(hdr->data_length ==1){ //è¢«è®¾ç½® ä¸º 1
                     hdr->result = 0;
                     hdr->data[0] = 0x01; /// GET / SET
 
@@ -515,7 +515,7 @@ void uvc_vcam::vendor_control(usbtx_header_t* hdr)
 
     case UVC_GET_CUR:
     {
-        if (LOBYTE(hdr->vendor.index) == 1) { /// ÊÓÆµÁ÷½Ó¿Ú
+        if (LOBYTE(hdr->vendor.index) == 1) { /// è§†é¢‘æµæ¥å£
             if (hdr->data_length < 26) { printf("UVC 1.0  GET_CUR must use 26 bytes \n"); break; }
 
             uvc_streaming_control* sc = (uvc_streaming_control*)hdr->data;
@@ -527,7 +527,7 @@ void uvc_vcam::vendor_control(usbtx_header_t* hdr)
             sc->wPFrameRate = 0;
             sc->wCompQuality = 0;
             sc->wCompWindowSize = 0;
-            sc->wDelay = 0x0A; //// Í£Áô ºÁÃë ms ???
+            sc->wDelay = 0x0A; //// åœç•™ æ¯«ç§’ ms ???
             sc->dwMaxVideoFrameSize = frames[curr_frame_index - 1].width* frames[curr_frame_index - 1].height* (bitsPerPixel / 8);
             sc->dwMaxPayloadTransferSize = 1024; //// ???? 
 
@@ -537,7 +537,7 @@ void uvc_vcam::vendor_control(usbtx_header_t* hdr)
 
     case UVC_SET_CUR:
     {
-        if (LOBYTE(hdr->vendor.index) == 1) { /// ÊÓÆµÁ÷½Ó¿Ú, ÉèÖÃ
+        if (LOBYTE(hdr->vendor.index) == 1) { /// è§†é¢‘æµæ¥å£, è®¾ç½®
             if (hdr->data_length < 26) { printf("UVC 1.0  SET_CUR must use 26 bytes \n"); break; }
 
             uvc_streaming_control* sc = (uvc_streaming_control*)hdr->data;
@@ -554,7 +554,7 @@ void uvc_vcam::vendor_control(usbtx_header_t* hdr)
 
     case UVC_GET_MIN:
     {
-        if (LOBYTE(hdr->vendor.index) == 1) { /// ÊÓÆµÁ÷½Ó¿Ú
+        if (LOBYTE(hdr->vendor.index) == 1) { /// è§†é¢‘æµæ¥å£
             if (hdr->data_length < 26) { printf("UVC 1.0  GET_MIN must use 26 bytes \n"); break; }
 
             uvc_streaming_control* sc = (uvc_streaming_control*)hdr->data;
@@ -569,7 +569,7 @@ void uvc_vcam::vendor_control(usbtx_header_t* hdr)
 
     case UVC_GET_MAX:
     {
-        if (LOBYTE(hdr->vendor.index) == 1) { /// ÊÓÆµÁ÷½Ó¿Ú
+        if (LOBYTE(hdr->vendor.index) == 1) { /// è§†é¢‘æµæ¥å£
             if (hdr->data_length < 26) { printf("UVC 1.0  GET_MAX must use 26 bytes \n"); break; }
 
             uvc_streaming_control* sc = (uvc_streaming_control*)hdr->data;
@@ -590,11 +590,11 @@ void uvc_vcam::control_transfer(usbtx_header_t* hdr)
     unsigned short value = *(unsigned short*)&code[2];
     unsigned short index = *(unsigned short*)&code[4];
 
-    ///Çı¶¯½Ó¿ÚÃ»´¦ÀíºÃ£¬ÓÉÓÚÎ¢Èí°ÑÄ³Ğ© ¿ØÖÆ´«Êä³éÈ¡³öÀ´×÷ÎªÁíÍâµÄURB_FUNCTION** ´¦Àí£¬Ôì³ÉÁ½Ì×½Ó¿Ú¡£¡£¡£¡£
+    ///é©±åŠ¨æ¥å£æ²¡å¤„ç†å¥½ï¼Œç”±äºå¾®è½¯æŠŠæŸäº› æ§åˆ¶ä¼ è¾“æŠ½å–å‡ºæ¥ä½œä¸ºå¦å¤–çš„URB_FUNCTION** å¤„ç†ï¼Œé€ æˆä¸¤å¥—æ¥å£ã€‚ã€‚ã€‚ã€‚
     usbtx_header_t bak_hdr;
-    memcpy(&bak_hdr.transfer, &hdr->transfer, sizeof(hdr->transfer)); ///±£´ætransferÄÚÈİ£¬´¦ÀíÍêºÃ»Ö¸´
+    memcpy(&bak_hdr.transfer, &hdr->transfer, sizeof(hdr->transfer)); ///ä¿å­˜transferå†…å®¹ï¼Œå¤„ç†å®Œå¥½æ¢å¤
 
-    if (code[1] == 6) { // GET_DESCRIPTOR »ñÈ¡ÃèÊö·û
+    if (code[1] == 6) { // GET_DESCRIPTOR è·å–æè¿°ç¬¦
         hdr->type = 1;
         hdr->descriptor.type = 1;
         hdr->descriptor.subtype = HIBYTE(value);
@@ -604,10 +604,10 @@ void uvc_vcam::control_transfer(usbtx_header_t* hdr)
 
         descriptor(hdr);
     }
-    else if (code[1] == 8) { // GET_CONFIGURATION ///»ñÈ¡ÅäÖÃ
+    else if (code[1] == 8) { // GET_CONFIGURATION ///è·å–é…ç½®
         printf("control transfer not supoorted GET_CONFIG\n");
     }
-    else if (code[1] == 11) { // SET_INTERFACE ÉèÖÃ½Ó¿Ú
+    else if (code[1] == 11) { // SET_INTERFACE è®¾ç½®æ¥å£
         int intfNum = LOBYTE(index);
         int altSet = LOBYTE(value);
         hdr->result = 0;
@@ -619,7 +619,7 @@ void uvc_vcam::control_transfer(usbtx_header_t* hdr)
         hdr->result = 0;
         printf("control transfer CLEAR_FEAUTURE \n");
     }
-    else if (code[0] == 0xA1) { // CLASS ÇëÇó
+    else if (code[0] == 0xA1) { // CLASS è¯·æ±‚
         hdr->type = 2;
         hdr->vendor.type = 1; // CALSS
         hdr->vendor.is_read = 1;
@@ -633,7 +633,7 @@ void uvc_vcam::control_transfer(usbtx_header_t* hdr)
         printf("control transfer not supported request=0x%X\n", code[1]);
     }
 
-    /////////»Ö¸´
+    /////////æ¢å¤
     hdr->type = 3;
     memcpy(&hdr->transfer, &bak_hdr.transfer, sizeof(hdr->transfer));
 }
@@ -643,7 +643,7 @@ void uvc_vcam::iso_transfer(usbtx_header_t* hdr)
     int HDR_LEN = ISO_PACKET_HDR_SIZE + iso_hdr->number_packets * sizeof(iso_packet);
     char* buffer = hdr->data + HDR_LEN;
     int   buf_len = hdr->data_length - HDR_LEN;
-    if (buf_len <= 12) { //Èç¹û³¤¶ÈĞ¡ÓÚplayerheaderÍ·
+    if (buf_len <= 12) { //å¦‚æœé•¿åº¦å°äºplayerheaderå¤´
         printf("falt error\n");
         return;
     }
@@ -657,9 +657,9 @@ void uvc_vcam::iso_transfer(usbtx_header_t* hdr)
         frame_buffer = (char*)malloc(frame_length);
     }
 
-    if (frame_pos <= 0) { //Ò»¸öÖ¡µÄ¿ªÊ¼
+    if (frame_pos <= 0) { //ä¸€ä¸ªå¸§çš„å¼€å§‹
 
-        Sleep(frame_delay_msec); ///Ç°Ò»¸öÖ¡Í£ÁôÒ»¶ÎÊ±¼ä
+        Sleep(frame_delay_msec); ///å‰ä¸€ä¸ªå¸§åœç•™ä¸€æ®µæ—¶é—´
 
         frame_t frame;
         frame.buffer = frame_buffer;
@@ -694,7 +694,7 @@ void uvc_vcam::iso_transfer(usbtx_header_t* hdr)
 
         if (ret >= buf_len) break;
 
-        if (frame_pos <= 0) { //Ö¡½áÊø
+        if (frame_pos <= 0) { //å¸§ç»“æŸ
             break;
         }
 
@@ -726,7 +726,7 @@ int uvc_vcam::video_encode(unsigned char* vid_buf, int vid_len)
 
     unsigned char* vid_hdr = vid_buf;
 
-    if (data_len <= 0) return -1; //Êı¾İ³¤¶È²»¹»
+    if (data_len <= 0) return -1; //æ•°æ®é•¿åº¦ä¸å¤Ÿ
 
     memset(vid_hdr, 0, VID_HDR_LEN);
     vid_hdr[0] = VID_HDR_LEN;
@@ -740,11 +740,11 @@ int uvc_vcam::video_encode(unsigned char* vid_buf, int vid_len)
 
     frame_pos += len;
 
-    if (frame_pos >= frame_length) { ///Ö¡½áÊø
+    if (frame_pos >= frame_length) { ///å¸§ç»“æŸ
         vid_hdr[1] |= UVC_STREAM_EOF;
 
-        frame_flip = !frame_flip; //·­×ª
-        frame_pos = 0; //´ÓĞÂ¿ªÊ¼
+        frame_flip = !frame_flip; //ç¿»è½¬
+        frame_pos = 0; //ä»æ–°å¼€å§‹
 
     }
 

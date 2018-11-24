@@ -1,4 +1,4 @@
-//// By Fanxiushu 2016-10-04
+ï»¿//// By Fanxiushu 2016-10-04
 
 #pragma once
 
@@ -8,7 +8,7 @@ struct frame_t
     int   length;
     int   width;
     int   height;
-    int   delay_msec; ///Í£ÁôÊ±¼ä
+    int   delay_msec; ///åœç•™æ—¶é—´
 
     void* param;
 };

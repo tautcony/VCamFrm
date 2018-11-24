@@ -1,5 +1,5 @@
-/// by fanxiushu 2016-10-01
-///Êı¾İ½á¹¹µÄÉùÃ÷£¬´Ó linuxÄÚºË´úÂë¸´ÖÆµÄ
+ï»¿/// by fanxiushu 2016-10-01
+///æ•°æ®ç»“æ„çš„å£°æ˜ï¼Œä» linuxå†…æ ¸ä»£ç å¤åˆ¶çš„
 
 /*
 * USB Video Class definitions.
@@ -543,7 +543,7 @@ struct uvc_streaming_control {
 	__u16 wCompWindowSize;
 	__u16 wDelay;
 	__u32 dwMaxVideoFrameSize;
-	__u32 dwMaxPayloadTransferSize; /// UVC 1.0°æ±¾Ö»µ½´Ë´¦£¬ ³¤¶È 26×Ö½Ú
+	__u32 dwMaxPayloadTransferSize; /// UVC 1.0ç‰ˆæœ¬åªåˆ°æ­¤å¤„ï¼Œ é•¿åº¦ 26å­—èŠ‚
 	__u32 dwClockFrequency;
 	__u8  bmFramingInfo;
 	__u8  bPreferedVersion;

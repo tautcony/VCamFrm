@@ -1,4 +1,4 @@
-
+ï»¿
 #include <WinSock2.h>
 #include <InitGuid.h>
 #include <WinIoCtl.h>
@@ -133,7 +133,7 @@ int virt_usb_plugin(void* handle, const char* dev_id, const char* hw_ids, const 
     }
     wchar_t t[HW_IDS_COUNT]; int i; memset(t, 0, sizeof(t));
     MultiByteToWideChar(CP_ACP, 0, hw_ids, -1, t, 259);
-    t[258] = 0; t[259] = 0; //Á½¸öÁã½áÎ²
+    t[258] = 0; t[259] = 0; //ä¸¤ä¸ªé›¶ç»“å°¾
     for (i = 0; i < 260; ++i) {
         if (t[i] == L'\n') t[i] = L'\0';
     }
@@ -152,7 +152,7 @@ int virt_usb_plugin(void* handle, const char* dev_id, const char* hw_ids, const 
     if (comp_ids && strlen(comp_ids) > 0) {
         memset(t, 0, sizeof(t));
         MultiByteToWideChar(CP_ACP, 0, comp_ids, -1, t, 259);
-        t[258] = 0; t[259] = 0; //Á½¸ö0½áÎ²
+        t[258] = 0; t[259] = 0; //ä¸¤ä¸ª0ç»“å°¾
         for (i = 0; i < 260; ++i) {
             if (t[i] == L'\n') t[i] = L'\0';
         }
@@ -196,7 +196,7 @@ int virt_usb_unplug(void* handle)
             dev->hSemaphore = 0;
         }
         if (dev->hRemoveEvent) {
-            ///µÈ´ý3Ãë£¬Ö±µ½Éè±¸±»ÒÆ³ý
+            ///ç­‰å¾…3ç§’ï¼Œç›´åˆ°è®¾å¤‡è¢«ç§»é™¤
             LONG timeout = 5 * 1000; //
             DWORD ret = ::WaitForSingleObject((HANDLE)dev->hRemoveEvent, timeout);
             if (ret != 0) {
@@ -291,7 +291,7 @@ usbtx_header_t* virt_usb_begin(void* handle)
     ret->result = (int)bytes - sizeof(ioctl_usbtx_header_t);
 
 
-    if (ret->type == 4 && ret->reset.type == 2) { //Ä£ÄâÉè±¸replug
+    if (ret->type == 4 && ret->reset.type == 2) { //æ¨¡æ‹Ÿè®¾å¤‡replug
 
         ret->result = 0; ///success,
         ret->data_length = 0;
@@ -363,7 +363,7 @@ void test()
     dev_id = "usb\\vid_05ac&pid_12a8";
     //	dev_id = "usb\\vid_05ca&pid_18c6";
     //	dev_id = "usb\\vid_0ac8&pid_3420";
-    //	dev_id = "usb\\vid_0781&pid_5580"; // U ÅÌ
+    //	dev_id = "usb\\vid_0781&pid_5580"; // U ç›˜
     for (list<usb_info_t>::iterator it = usb_infos.begin(); it != usb_infos.end(); ++it) {
         if (strnicmp(it->dev_id, dev_id, strlen(dev_id)) == 0) {
             printf("**** [%s] [%s] [%s] \n", it->hw_id, it->dev_id, it->dev_desc);

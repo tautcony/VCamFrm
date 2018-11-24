@@ -1,4 +1,4 @@
-/// By fanxiushu 2016-04-06 
+ï»¿/// By fanxiushu 2016-04-06 
 #pragma once
 
 // {ED3FB623-0C23-48B8-880A-9D1A07263FFD}
@@ -24,14 +24,14 @@ DEFINE_GUID(GUID_XUSB_VIRT_INTERFACE,
 
 struct ioctl_pdo_create_t
 {
-    //ÓÃÓÚ»ñÈ¡URB Í¨Öª, ²ÉÓÃ ULONGLONG ,¼æÈİ32ºÍ64Î»³ÌĞò
+    //ç”¨äºè·å–URB é€šçŸ¥, é‡‡ç”¨ ULONGLONG ,å…¼å®¹32å’Œ64ä½ç¨‹åº
     ULONGLONG     hSemaphore;
-    ULONGLONG     hRemoveEvent; ///Éè±¸·¢ÉúÒÆ³ı»áÉèÖÃÕâ¸öÖµ
-    LONG          BusAddress; ///ÕâÖ»ÊÇ¸ö½¨ÒéÖµ£¬Çı¶¯»á¸ù¾İÕâ¸öÖµ£¬ËÑË÷Ã»ÔÙÊ¹ÓÃµÄÖµ,Èç¹ûÊÇ0£¬ÔòºöÂÔ
+    ULONGLONG     hRemoveEvent; ///è®¾å¤‡å‘ç”Ÿç§»é™¤ä¼šè®¾ç½®è¿™ä¸ªå€¼
+    LONG          BusAddress; ///è¿™åªæ˜¯ä¸ªå»ºè®®å€¼ï¼Œé©±åŠ¨ä¼šæ ¹æ®è¿™ä¸ªå€¼ï¼Œæœç´¢æ²¡å†ä½¿ç”¨çš„å€¼,å¦‚æœæ˜¯0ï¼Œåˆ™å¿½ç•¥
 
     /// SZ
     WCHAR device_id[HW_IDS_COUNT];
-    ///MULTI SZ ÀàĞÍ
+    ///MULTI SZ ç±»å‹
     WCHAR hardware_ids[HW_IDS_COUNT];
     ///MULTI SZ
     WCHAR compatible_ids[HW_IDS_COUNT];
@@ -39,7 +39,7 @@ struct ioctl_pdo_create_t
 
 #pragma pack(1)
 
-///ISO´«ÊäÊ±ºò¸½¼ÓµÄ°üĞÅÏ¢
+///ISOä¼ è¾“æ—¶å€™é™„åŠ çš„åŒ…ä¿¡æ¯
 struct iso_packet_t
 {
     unsigned int offset;
@@ -48,10 +48,10 @@ struct iso_packet_t
 };
 struct iso_packet_hdr_t
 {
-    unsigned int start_frame;  ///¿ªÊ¼Ö¡
-    unsigned int flags;       //Ö÷ÒªÓÃÓÚÅĞ¶ÏÊÇ·ñÉèÖÃ START_ISO_TRANSFER_ASAP
-    unsigned int error_count;  ///´íÎó°ü¸öÊı
-    unsigned int number_packets; // iSO °ü¸öÊı
+    unsigned int start_frame;  ///å¼€å§‹å¸§
+    unsigned int flags;       //ä¸»è¦ç”¨äºåˆ¤æ–­æ˜¯å¦è®¾ç½® START_ISO_TRANSFER_ASAP
+    unsigned int error_count;  ///é”™è¯¯åŒ…ä¸ªæ•°
+    unsigned int number_packets; // iSO åŒ…ä¸ªæ•°
 
     iso_packet_t packets[1];
 };
@@ -59,67 +59,67 @@ struct iso_packet_hdr_t
 
 struct ioctl_usbtx_header_t
 {
-    ULONGLONG        inter_handle;        //  ÊÇµÈ´ı´¦ÀíµÄÎÄ¼şIRP Ö¸Õë
-    LONG             inter_seqno;         //  Ã¿¸öIRPµÄĞòÁĞºÅ£¬ÓÉÇı¶¯²úÉú£¬ºÍinter_handleÒ»ÆğÓÃÀ´±£Ö¤ÇëÇó°üµÄÎ¨Ò»ĞÔÑéÖ¤  
-    LONG             data_length;         //  Êı¾İµÄ³¤¶È; Èç¹ûÊÇ¶ÁÉè±¸£¬Ôò¶ÁÈ¡µÄ×Ö½ÚÊı£» Èç¹ûÊÇĞ´Êı¾İµ½Éè±¸£¬Ğ´ÈëÇ°ÊÇĞèÒªĞ´ÈëµÄ×Ö½ÚÊı£¬Ğ´Èë³É¹¦ºó£¬Êµ¼ÊĞ´ÈëµÄ×Ö½ÚÊı,ISO ´«Êä»á°üÀ¨ iso_packet_hdr_t½á¹¹´óĞ¡
-    LONG             result;              //  ·µ»ØÊÇ·ñ³É¹¦
-    LONG             reserved1;           //  ±£Áô
+    ULONGLONG        inter_handle;        //  æ˜¯ç­‰å¾…å¤„ç†çš„æ–‡ä»¶IRP æŒ‡é’ˆ
+    LONG             inter_seqno;         //  æ¯ä¸ªIRPçš„åºåˆ—å·ï¼Œç”±é©±åŠ¨äº§ç”Ÿï¼Œå’Œinter_handleä¸€èµ·ç”¨æ¥ä¿è¯è¯·æ±‚åŒ…çš„å”¯ä¸€æ€§éªŒè¯  
+    LONG             data_length;         //  æ•°æ®çš„é•¿åº¦; å¦‚æœæ˜¯è¯»è®¾å¤‡ï¼Œåˆ™è¯»å–çš„å­—èŠ‚æ•°ï¼› å¦‚æœæ˜¯å†™æ•°æ®åˆ°è®¾å¤‡ï¼Œå†™å…¥å‰æ˜¯éœ€è¦å†™å…¥çš„å­—èŠ‚æ•°ï¼Œå†™å…¥æˆåŠŸåï¼Œå®é™…å†™å…¥çš„å­—èŠ‚æ•°,ISO ä¼ è¾“ä¼šåŒ…æ‹¬ iso_packet_hdr_tç»“æ„å¤§å°
+    LONG             result;              //  è¿”å›æ˜¯å¦æˆåŠŸ
+    LONG             reserved1;           //  ä¿ç•™
 
 
-    int        type;  // 1 »ñÈ¡ÃèÊö·û, 2 vendor or class £¬ 3 ´«ÊäÊı¾İ,  4 ÖØÖÃ, 5 »ñÈ¡×´Ì¬, 6 ²Ù×÷feature
-    int        reserved[3]; //±£Áô
+    int        type;  // 1 è·å–æè¿°ç¬¦, 2 vendor or class ï¼Œ 3 ä¼ è¾“æ•°æ®,  4 é‡ç½®, 5 è·å–çŠ¶æ€, 6 æ“ä½œfeature
+    int        reserved[3]; //ä¿ç•™
 
     union {
 
         struct {
-            int          type;     // 1 »ñÈ¡»òÉèÖÃÉè±¸ÃèÊö·û£¬ 2 ÉèÖÃÅäÖÃÃèÊö·û, 3 »ñÈ¡»òÉèÖÃ½Ó¿ÚÃèÊö·û£¬ 4 »ñÈ¡»òÉèÖÃ¶Ë¿ÚÃèÊö·û, 5 »ñÈ¡Î¢ÈíĞÅÏ¢URB_FUNCTION_GET_MS_FEATURE_DESCRIPTOR
-            int          subtype;  // (type=1,3,4) 1 »ñÈ¡Éè±¸ÃèÊö·û£¬ 2 »ñÈ¡ÅäÖÃÃèÊö·û£¬ 3 »ñÈ¡×Ö·û´®;;;;; (type=2) 1ÉèÖÃconfig(index=-1 & value=-1 unconfigure)£¬ 2 ÉèÖÃ interface
-            int          is_read;  // (type=1,3,4) is_readÎªTRUE»ñÈ¡ÃèÊö·û£¬FALSE ÉèÖÃÃèÊö·û
-            int          index;    // ĞòºÅ, (type=5 LOBYTE(index)=interfaceNumber, HIBYTE(index)=Recipient)
-            int          value;    // Öµ, »ñÈ¡stringÊ±¶¨Òå³Élanguage_id, (type=5 Îª MS_FeatureDescriptorIndex)
+            int          type;     // 1 è·å–æˆ–è®¾ç½®è®¾å¤‡æè¿°ç¬¦ï¼Œ 2 è®¾ç½®é…ç½®æè¿°ç¬¦, 3 è·å–æˆ–è®¾ç½®æ¥å£æè¿°ç¬¦ï¼Œ 4 è·å–æˆ–è®¾ç½®ç«¯å£æè¿°ç¬¦, 5 è·å–å¾®è½¯ä¿¡æ¯URB_FUNCTION_GET_MS_FEATURE_DESCRIPTOR
+            int          subtype;  // (type=1,3,4) 1 è·å–è®¾å¤‡æè¿°ç¬¦ï¼Œ 2 è·å–é…ç½®æè¿°ç¬¦ï¼Œ 3 è·å–å­—ç¬¦ä¸²;;;;; (type=2) 1è®¾ç½®config(index=-1 & value=-1 unconfigure)ï¼Œ 2 è®¾ç½® interface
+            int          is_read;  // (type=1,3,4) is_readä¸ºTRUEè·å–æè¿°ç¬¦ï¼ŒFALSE è®¾ç½®æè¿°ç¬¦
+            int          index;    // åºå·, (type=5 LOBYTE(index)=interfaceNumber, HIBYTE(index)=Recipient)
+            int          value;    // å€¼, è·å–stringæ—¶å®šä¹‰æˆlanguage_id, (type=5 ä¸º MS_FeatureDescriptorIndex)
 
         }descriptor;
 
         struct {
-            int          type;    //1 CLASSÇëÇó£¬ 2 VENDORÇëÇó
+            int          type;    //1 CLASSè¯·æ±‚ï¼Œ 2 VENDORè¯·æ±‚
             int          subtype; //1 device; 2 interface ; 3 endpoint; 4 other
-            int          is_read; //ÊÇ´ÓÉè±¸¶Á£¬»¹ÊÇĞ´ÈëÉè±¸
+            int          is_read; //æ˜¯ä»è®¾å¤‡è¯»ï¼Œè¿˜æ˜¯å†™å…¥è®¾å¤‡
             int          request;
             int          index;
             int          value;
         }vendor;
 
         struct {
-            int           type; // 1 ¿ØÖÆ´«Êä,  2 ÖĞ¶Ï»òÅúÁ¿´«Êä£¬ 3 Í¬²½´«Êä
-            int           ep_address; //¶Ë¿ÚÎ»ÖÃ   Èç¹û (ep_address &0x80) ÔòÊÇ¶Á£¬·ñÔòĞ´;  ¿ØÖÆ´«ÊäÊ±ºò£¬Èç¹ûÎª0±íÊ¾Ê¹ÓÃÄ¬ÈÏ¶Ë¿Ú
-            int           is_read;    //ÊÇ´ÓÉè±¸¶Á£¬»¹ÊÇĞ´ÈëÉè±¸
+            int           type; // 1 æ§åˆ¶ä¼ è¾“,  2 ä¸­æ–­æˆ–æ‰¹é‡ä¼ è¾“ï¼Œ 3 åŒæ­¥ä¼ è¾“
+            int           ep_address; //ç«¯å£ä½ç½®   å¦‚æœ (ep_address &0x80) åˆ™æ˜¯è¯»ï¼Œå¦åˆ™å†™;  æ§åˆ¶ä¼ è¾“æ—¶å€™ï¼Œå¦‚æœä¸º0è¡¨ç¤ºä½¿ç”¨é»˜è®¤ç«¯å£
+            int           is_read;    //æ˜¯ä»è®¾å¤‡è¯»ï¼Œè¿˜æ˜¯å†™å…¥è®¾å¤‡
             union {
-                struct { //ÖĞ¶Ï£¬ÅúÁ¿£¬Í¬²½´«Êä
-                    int           number_packets; //Í¬²½´«ÊäÊ±ºò£¬°ü¸öÊı,Èç¹ûÎª0£¬Ôò×éºÏµ½Ò»Æğ´«Êä£¬>0ÔòÔÚÍ·ºóÃæ¸úiso_packet_hdr_t½á¹¹£¬´óĞ¡Îª ISO_PACKET_HDR_SIZE + number_packets*sizeof(iso_packet_t)
+                struct { //ä¸­æ–­ï¼Œæ‰¹é‡ï¼ŒåŒæ­¥ä¼ è¾“
+                    int           number_packets; //åŒæ­¥ä¼ è¾“æ—¶å€™ï¼ŒåŒ…ä¸ªæ•°,å¦‚æœä¸º0ï¼Œåˆ™ç»„åˆåˆ°ä¸€èµ·ä¼ è¾“ï¼Œ>0åˆ™åœ¨å¤´åé¢è·Ÿiso_packet_hdr_tç»“æ„ï¼Œå¤§å°ä¸º ISO_PACKET_HDR_SIZE + number_packets*sizeof(iso_packet_t)
                     int           reserved0;
-                    char          is_split;      ///ÖĞ¶ÏÅúÁ¿´«Êä£¬»òÍ¬²½´«ÊäÊÇ·ñ²ğ·Ö³É¶à¿é£¬ 
+                    char          is_split;      ///ä¸­æ–­æ‰¹é‡ä¼ è¾“ï¼Œæˆ–åŒæ­¥ä¼ è¾“æ˜¯å¦æ‹†åˆ†æˆå¤šå—ï¼Œ 
                     char          reserved[3];
                 };
-                struct { //¿ØÖÆ´«Êä
-                    unsigned char setup_packet[8]; /////¿ØÖÆ´«ÊäÊ±ºò£¬·¢ËÍµÄ8¸ö×Ö½ÚµÄ¿ØÖÆÂë
-                    unsigned int  timeout;         /////URB_FUNCTION_CONTROL_TRANSFER_EX ¶ÔÓ¦µÄ³¬Ê±Öµ£¬µ¥Î»ºÁÃë,Îª0 ±íÊ¾²»Ê¹ÓÃ³¬Ê±£¬µÈÍ¬ÓÚURB_FUNCTION_CONTROL_TRANSFER
+                struct { //æ§åˆ¶ä¼ è¾“
+                    unsigned char setup_packet[8]; /////æ§åˆ¶ä¼ è¾“æ—¶å€™ï¼Œå‘é€çš„8ä¸ªå­—èŠ‚çš„æ§åˆ¶ç 
+                    unsigned int  timeout;         /////URB_FUNCTION_CONTROL_TRANSFER_EX å¯¹åº”çš„è¶…æ—¶å€¼ï¼Œå•ä½æ¯«ç§’,ä¸º0 è¡¨ç¤ºä¸ä½¿ç”¨è¶…æ—¶ï¼Œç­‰åŒäºURB_FUNCTION_CONTROL_TRANSFER
                 };
             };
 
         }transfer;
 
         struct {
-            int           type; /// 1 IOCTL_INTERNAL_USB_RESET_PORTÖØÖÃÉè±¸£» 2 IOCTL_INTERNAL_USB_CYCLE_PORT ÖØÖÃÉè±¸£» 3 ÖØÖÃ¶Ë¿ÚURB_FUNCTION_RESET_PIPE; 4 ÖĞ¶Ï¶Ë¿Ú URB_FUNCTION_ABORT_PIPE
+            int           type; /// 1 IOCTL_INTERNAL_USB_RESET_PORTé‡ç½®è®¾å¤‡ï¼› 2 IOCTL_INTERNAL_USB_CYCLE_PORT é‡ç½®è®¾å¤‡ï¼› 3 é‡ç½®ç«¯å£URB_FUNCTION_RESET_PIPE; 4 ä¸­æ–­ç«¯å£ URB_FUNCTION_ABORT_PIPE
             int           ep_address;
         }reset;
 
         struct {
-            int           type; /// 1 device; 2 interface ; 3 endpoint; 4 other status; 5 »ñÈ¡µ±Ç°ÅäÖÃÃèÊö·û£»6 ¸ù¾İinterface»ñÈ¡µ±Ç°½Ó¿ÚµÄalterantesetting; 7 »ñÈ¡current frame number
+            int           type; /// 1 device; 2 interface ; 3 endpoint; 4 other status; 5 è·å–å½“å‰é…ç½®æè¿°ç¬¦ï¼›6 æ ¹æ®interfaceè·å–å½“å‰æ¥å£çš„alterantesetting; 7 è·å–current frame number
             int           index;
         }status;
 
         struct {
-            int           type;     //// 1 SETÇëÇó£¬ 2 CLEARÇëÇó
+            int           type;     //// 1 SETè¯·æ±‚ï¼Œ 2 CLEARè¯·æ±‚
             int           subtype;  ///  1 device; 2 interface ; 3 endpoint; 4 other
             int           index;
             int           value;
