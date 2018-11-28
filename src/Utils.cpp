@@ -16,24 +16,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include <cstdio>
 #include <string>
-#include <iostream>
 #include <algorithm>
 #include "Utils.h"
 
 
-std::vector<unsigned char> bitmapToArray(Gdiplus::Bitmap &bitmap, int target_width, int target_height)
+std::vector<unsigned char> bitmap_to_array(Gdiplus::Bitmap &bitmap, const int target_width, const int target_height)
 {
     if (bitmap.GetLastStatus() != Gdiplus::Ok) {
         printf("failed to load file\n");
         return std::vector<unsigned char>();
     }
-    Gdiplus::Bitmap* ret = nullptr;
-    if (bitmap.GetWidth() != target_width || bitmap.GetHeight() != target_height)
+    Gdiplus::Bitmap* ret;
+    if (static_cast<int>(bitmap.GetWidth()) != target_width || static_cast<int>(bitmap.GetHeight()) != target_height)
     {
         // auto ratio = ((double)bitmap.GetWidth()) / ((double)bitmap.GetHeight());
-        auto resized_bitmap = new Gdiplus::Bitmap(target_width, target_height, bitmap.GetPixelFormat());
-        auto resized_width = target_width;
-        auto resized_height = target_height;
+        const auto resized_bitmap = new Gdiplus::Bitmap(target_width, target_height, bitmap.GetPixelFormat());
+        const auto resized_width = target_width;
+        const auto resized_height = target_height;
         Gdiplus::Graphics graphics(resized_bitmap);
         graphics.DrawImage(&bitmap, 0, 0, resized_width, resized_height);
         ret = resized_bitmap;
@@ -42,15 +41,19 @@ std::vector<unsigned char> bitmapToArray(Gdiplus::Bitmap &bitmap, int target_wid
     {
         ret = &bitmap;
     }
+    if (ret == nullptr)
+    {
+        return std::vector<unsigned char>();
+    }
 
-    auto data = new Gdiplus::BitmapData;
+    const auto data = new Gdiplus::BitmapData;
     auto rect = Gdiplus::Rect(0, 0, target_width, target_height);
-    auto status = ret->LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat24bppRGB, data);
+    const auto status = ret->LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat24bppRGB, data);
     if (status != Gdiplus::Ok)
     {
         printf("Failed to LockBits.\n");
     }
-    auto pixels = (unsigned char*)data->Scan0;
+    const auto pixels = static_cast<unsigned char*>(data->Scan0);
     std::vector<unsigned char> rgb24array(pixels, pixels + target_width * target_height * 3);
     bitmap.UnlockBits(data);
     if (&bitmap != ret)
@@ -61,34 +64,34 @@ std::vector<unsigned char> bitmapToArray(Gdiplus::Bitmap &bitmap, int target_wid
 }
 
 //https://en.wikipedia.org/wiki/YUV
-void rgb24_yuy2(void* rgb, void* yuy2, int width, int height)
+void rgb24_yuy2(void* rgb, void* yuy2, const int width, const int height)
 {
-    unsigned char* pRGBData = (unsigned char*)rgb;
-    unsigned char* pYUVData = (unsigned char*)yuy2;
+    const auto pRGBData = static_cast<unsigned char*>(rgb);
+    const auto pYUVData = static_cast<unsigned char*>(yuy2);
 
     for (int i = 0; i < height; ++i)
     {
         for (int j = 0; j < width / 2; ++j)
         {
-            auto B1 = *(pRGBData + i * width * 3 + j * 6);
-            auto G1 = *(pRGBData + i * width * 3 + j * 6 + 1);
-            auto R1 = *(pRGBData + i * width * 3 + j * 6 + 2);
-            auto B2 = *(pRGBData + i * width * 3 + j * 6 + 3);
-            auto G2 = *(pRGBData + i * width * 3 + j * 6 + 4);
-            auto R2 = *(pRGBData + i * width * 3 + j * 6 + 5);
+            const auto b1 = *(pRGBData + i * width * 3 + j * 6);
+            const auto g1 = *(pRGBData + i * width * 3 + j * 6 + 1);
+            const auto r1 = *(pRGBData + i * width * 3 + j * 6 + 2);
+            const auto b2 = *(pRGBData + i * width * 3 + j * 6 + 3);
+            const auto g2 = *(pRGBData + i * width * 3 + j * 6 + 4);
+            const auto r2 = *(pRGBData + i * width * 3 + j * 6 + 5);
 
-            auto Y1 = ((77 * R1 + 150 * G1 + 29 * B1 + 128) >> 8);
-            auto Y2 = ((77 * R2 + 150 * G2 + 29 * B2 + 128) >> 8);
-             
-            auto U1 = (((-43 * R1 - 84 * G1 + 127 * B1 + 128) >> 8) +
-                      ((-43 * R2 - 84 * G2 + 127 * B2 + 128) >> 8)) / 2 + 128;
-            auto V1 = (((127 * R1 - 106 * G1 - 21 * B1 + 128) >> 8) +
-                      ((127 * R2 - 106 * G2 - 21 * B2 + 128) >> 8)) / 2 + 128;
+            const auto y1 = ((77 * r1 + 150 * g1 + 29 * b1 + 128) >> 8);
+            const auto y2 = ((77 * r2 + 150 * g2 + 29 * b2 + 128) >> 8);
 
-            *(pYUVData + i * width * 2 + j * 4 + 0) = (unsigned char)max(min(Y1, 255), 0);
-            *(pYUVData + i * width * 2 + j * 4 + 1) = (unsigned char)max(min(U1, 255), 0);
-            *(pYUVData + i * width * 2 + j * 4 + 2) = (unsigned char)max(min(Y2, 255), 0);
-            *(pYUVData + i * width * 2 + j * 4 + 3) = (unsigned char)max(min(V1, 255), 0);
+            const auto u1 = (((-43 * r1 - 84 * g1 + 127 * b1 + 128) >> 8) +
+                      ((-43 * r2 - 84 * g2 + 127 * b2 + 128) >> 8)) / 2 + 128;
+            const auto v1 = (((127 * r1 - 106 * g1 - 21 * b1 + 128) >> 8) +
+                      ((127 * r2 - 106 * g2 - 21 * b2 + 128) >> 8)) / 2 + 128;
+
+            *(pYUVData + i * width * 2 + j * 4 + 0) = static_cast<unsigned char>(max(min(y1, 255), 0));
+            *(pYUVData + i * width * 2 + j * 4 + 1) = static_cast<unsigned char>(max(min(u1, 255), 0));
+            *(pYUVData + i * width * 2 + j * 4 + 2) = static_cast<unsigned char>(max(min(y2, 255), 0));
+            *(pYUVData + i * width * 2 + j * 4 + 3) = static_cast<unsigned char>(max(min(v1, 255), 0));
         }
     }
 }
@@ -96,13 +99,13 @@ void rgb24_yuy2(void* rgb, void* yuy2, int width, int height)
 
 int frame_callback(frame_t* frame)
 {
-    vcam_param* p = (vcam_param*)frame->param;
+    auto p = static_cast<vcam_param*>(frame->param);
     if (p->updated)
     {
         EnterCriticalSection(&p->cs);
-        auto ret = bitmapToArray(*p->bitmap, frame->width, frame->height);
+        auto ret = bitmap_to_array(*p->bitmap, frame->width, frame->height);
         LeaveCriticalSection(&p->cs);
-        if (ret.size() == 0)
+        if (ret.empty())
         {
             p->updated = false;
             return 1;
@@ -126,8 +129,7 @@ void init_vcam_param(vcam_param &p) {
 
 void change_image(vcam_param &p, Gdiplus::Bitmap* bitmap)
 {
-    if (p.bitmap)
-        delete p.bitmap;
+    delete p.bitmap;
     p.bitmap = bitmap;
     // if (p.yuv_buffer)
     //     delete[] p.yuv_buffer;
