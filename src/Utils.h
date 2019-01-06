@@ -16,6 +16,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #pragma once
 #include <vector>
+#include <memory>
 #include <Windows.h>
 #include <Gdiplus.h>
 #include "xusb_vcam/uvc_vcam.h"
@@ -23,16 +24,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 struct vcam_param
 {
     bool updated;
-    Gdiplus::Bitmap* bitmap;
+    std::shared_ptr<Gdiplus::Bitmap> bitmap;
 
-    // unsigned char* yuv_buffer;
-    // size_t buffer_size;
-    CRITICAL_SECTION cs;
+    CRITICAL_SECTION cs{};
+    vcam_param();
 };
 
-std::vector<unsigned char> bitmap_to_array(Gdiplus::Bitmap& bitmap, int target_width, int target_height);
+std::vector<unsigned char> bitmap_to_array(const std::shared_ptr<Gdiplus::Bitmap>& bitmap, int target_width, int target_height);
 void rgb24_yuy2(void* rgb, void* yuy2, int width, int height);
 int frame_callback(frame_t* frame);
-void init_vcam_param(vcam_param& p);
-void change_image(vcam_param& p, Gdiplus::Bitmap* bitmap);
-Gdiplus::Bitmap* resize(Gdiplus::Bitmap *src, const int dst_width, const int dst_height);
+void change_image(vcam_param& p, const std::wstring& image_path);
+std::shared_ptr<Gdiplus::Bitmap> resize(const std::shared_ptr<Gdiplus::Bitmap>& src, const int dst_width, const int dst_height);

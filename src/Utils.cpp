@@ -19,47 +19,29 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include "Utils.h"
 
-
-std::vector<unsigned char> bitmap_to_array(Gdiplus::Bitmap &bitmap, const int target_width, const int target_height)
+vcam_param::vcam_param()
 {
-    if (bitmap.GetLastStatus() != Gdiplus::Ok) {
+    this->updated = false;
+    InitializeCriticalSection(&this->cs);
+}
+
+std::vector<unsigned char> bitmap_to_array(const std::shared_ptr<Gdiplus::Bitmap>& bitmap, const int target_width, const int target_height)
+{
+    if (bitmap->GetLastStatus() != Gdiplus::Ok) {
         printf("failed to load file\n");
         return std::vector<unsigned char>();
     }
-    Gdiplus::Bitmap* ret;
-    if (static_cast<int>(bitmap.GetWidth()) != target_width || static_cast<int>(bitmap.GetHeight()) != target_height)
-    {
-        // auto ratio = ((double)bitmap.GetWidth()) / ((double)bitmap.GetHeight());
-        const auto resized_bitmap = new Gdiplus::Bitmap(target_width, target_height, bitmap.GetPixelFormat());
-        const auto resized_width = target_width;
-        const auto resized_height = target_height;
-        Gdiplus::Graphics graphics(resized_bitmap);
-        graphics.DrawImage(&bitmap, 0, 0, resized_width, resized_height);
-        ret = resized_bitmap;
-    }
-    else
-    {
-        ret = &bitmap;
-    }
-    if (ret == nullptr)
-    {
-        return std::vector<unsigned char>();
-    }
 
-    const auto data = new Gdiplus::BitmapData;
+    const std::shared_ptr<Gdiplus::BitmapData>data(new Gdiplus::BitmapData);
     auto rect = Gdiplus::Rect(0, 0, target_width, target_height);
-    const auto status = ret->LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat24bppRGB, data);
+    const auto status = bitmap->LockBits(&rect, Gdiplus::ImageLockModeRead, PixelFormat24bppRGB, data.get());
     if (status != Gdiplus::Ok)
     {
         printf("Failed to LockBits.\n");
     }
     const auto pixels = static_cast<unsigned char*>(data->Scan0);
     std::vector<unsigned char> rgb24array(pixels, pixels + target_width * target_height * 3);
-    bitmap.UnlockBits(data);
-    if (&bitmap != ret)
-    {
-        delete ret;
-    }
+    bitmap->UnlockBits(data.get());
     return rgb24array;
 }
 
@@ -104,8 +86,7 @@ int frame_callback(frame_t* frame)
     {
         EnterCriticalSection(&p->cs);
         const auto resized_img = resize(p->bitmap, frame->width, frame->height);
-        auto ret = bitmap_to_array(*resized_img, frame->width, frame->height);
-        delete resized_img;
+        auto ret = bitmap_to_array(resized_img, frame->width, frame->height);
         LeaveCriticalSection(&p->cs);
         if (ret.empty())
         {
@@ -122,17 +103,10 @@ int frame_callback(frame_t* frame)
     return 0;
 }
 
-void init_vcam_param(vcam_param &p) {
-    p.updated = false;
-    p.bitmap = nullptr;
-    // p.yuv_buffer = nullptr;
-    InitializeCriticalSection(&p.cs);
-}
 
-void change_image(vcam_param &p, Gdiplus::Bitmap* bitmap)
+void change_image(vcam_param &p, const std::wstring& image_path)
 {
-    delete p.bitmap;
-    p.bitmap = bitmap;
+    p.bitmap.reset(Gdiplus::Bitmap::FromFile(image_path.c_str()));
     // if (p.yuv_buffer)
     //     delete[] p.yuv_buffer;
     // p.yuv_buffer = nullptr;
@@ -140,10 +114,10 @@ void change_image(vcam_param &p, Gdiplus::Bitmap* bitmap)
 }
 
 
-Gdiplus::Bitmap* resize(Gdiplus::Bitmap *src, const int dst_width, const int dst_height)
+std::shared_ptr<Gdiplus::Bitmap> resize(const std::shared_ptr<Gdiplus::Bitmap>& src, const int dst_width, const int dst_height)
 {
-    const auto ret = new Gdiplus::Bitmap(dst_width, dst_height, src->GetPixelFormat());
-    Gdiplus::Graphics g(ret);
+    std::shared_ptr<Gdiplus::Bitmap> ret(new Gdiplus::Bitmap(dst_width, dst_height, src->GetPixelFormat()));
+    Gdiplus::Graphics g(ret.get());
     const auto src_aspect = static_cast<double>(src->GetWidth()) / src->GetHeight();
     const auto dst_aspect = static_cast<double>(dst_width) / dst_height;
     auto new_width = dst_width;
@@ -158,6 +132,6 @@ Gdiplus::Bitmap* resize(Gdiplus::Bitmap *src, const int dst_width, const int dst
     }
     const auto delta_width = (dst_width - new_width) / 2;
     const auto delta_height = (dst_height - new_height) / 2;
-    g.DrawImage(src, delta_width, delta_height, new_width, new_height);
+    g.DrawImage(src.get(), delta_width, delta_height, new_width, new_height);
     return ret;
 }
