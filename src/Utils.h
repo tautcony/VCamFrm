@@ -35,3 +35,4 @@ void rgb24_yuy2(void* rgb, void* yuy2, int width, int height);
 int frame_callback(frame_t* frame);
 void init_vcam_param(vcam_param& p);
 void change_image(vcam_param& p, Gdiplus::Bitmap* bitmap);
+Gdiplus::Bitmap* resize(Gdiplus::Bitmap *src, const int dst_width, const int dst_height);

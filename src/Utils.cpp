@@ -103,7 +103,9 @@ int frame_callback(frame_t* frame)
     if (p->updated)
     {
         EnterCriticalSection(&p->cs);
-        auto ret = bitmap_to_array(*p->bitmap, frame->width, frame->height);
+        const auto resized_img = resize(p->bitmap, frame->width, frame->height);
+        auto ret = bitmap_to_array(*resized_img, frame->width, frame->height);
+        delete resized_img;
         LeaveCriticalSection(&p->cs);
         if (ret.empty())
         {
@@ -135,4 +137,27 @@ void change_image(vcam_param &p, Gdiplus::Bitmap* bitmap)
     //     delete[] p.yuv_buffer;
     // p.yuv_buffer = nullptr;
     p.updated = true;
+}
+
+
+Gdiplus::Bitmap* resize(Gdiplus::Bitmap *src, const int dst_width, const int dst_height)
+{
+    const auto ret = new Gdiplus::Bitmap(dst_width, dst_height, src->GetPixelFormat());
+    Gdiplus::Graphics g(ret);
+    const auto src_aspect = static_cast<double>(src->GetWidth()) / src->GetHeight();
+    const auto dst_aspect = static_cast<double>(dst_width) / dst_height;
+    auto new_width = dst_width;
+    auto new_height = dst_height;
+    if (src_aspect < dst_aspect)
+    {
+        new_width = static_cast<int>(floor(dst_height * src_aspect));
+    }
+    else
+    {
+        new_height = static_cast<int>(floor(dst_width / src_aspect));
+    }
+    const auto delta_width = (dst_width - new_width) / 2;
+    const auto delta_height = (dst_height - new_height) / 2;
+    g.DrawImage(src, delta_width, delta_height, new_width, new_height);
+    return ret;
 }
