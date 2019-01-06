@@ -16,7 +16,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 #include <cstdio>
 #include <string>
-#include <algorithm>
 #include "Utils.h"
 
 vcam_param::vcam_param()

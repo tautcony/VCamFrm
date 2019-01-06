@@ -34,4 +34,4 @@ std::vector<unsigned char> bitmap_to_array(const std::shared_ptr<Gdiplus::Bitmap
 void rgb24_yuy2(void* rgb, void* yuy2, int width, int height);
 int frame_callback(frame_t* frame);
 void change_image(vcam_param& p, const std::wstring& image_path);
-std::shared_ptr<Gdiplus::Bitmap> resize(const std::shared_ptr<Gdiplus::Bitmap>& src, const int dst_width, const int dst_height);
+std::shared_ptr<Gdiplus::Bitmap> resize(const std::shared_ptr<Gdiplus::Bitmap>& src, int dst_width, int dst_height);
